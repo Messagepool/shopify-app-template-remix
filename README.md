@@ -24,6 +24,8 @@ Using Shopify CLI to generate a shopify app with this template.
 shopify app init --template=https://github.com/Messagepool/shopify-app-template-remix
 ```
 
+Create a `.env` file by copying from `.env.sample` and providing your custom values.
+
 ### Local Development
 
 This template uses docker for its local development environment. Build and run the docker container.

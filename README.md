@@ -18,44 +18,31 @@ Before you begin, you'll need the following:
 
 ### Setup
 
-If you used the CLI to create the template, you can skip this section.
-
-Using yarn:
+Using Shopify CLI to generate a shopify app with this template.
 
 ```shell
-yarn install
-```
-
-Using npm:
-
-```shell
-npm install
-```
-
-Using pnpm:
-
-```shell
-pnpm install
+shopify app init --template=https://github.com/Messagepool/shopify-app-template-remix
 ```
 
 ### Local Development
 
-Using yarn:
+This template uses docker for its local development environment. Build and run the docker container.
 
 ```shell
-yarn dev
+docker compose build
+docker compose up -d
 ```
 
-Using npm:
+Connect to the docker container (app):
+
+```shell
+docker compose exec -it app sh
+```
+
+Start the app using npm:
 
 ```shell
 npm run dev
-```
-
-Using pnpm:
-
-```shell
-pnpm run dev
 ```
 
 Press P to open the URL to your app. Once you click install, you can start development.
@@ -102,22 +89,9 @@ Please read the [documentation for @shopify/shopify-app-remix](https://www.npmjs
 
 ### Application Storage
 
-This template uses [Prisma](https://www.prisma.io/) to store session data, by default using an [SQLite](https://www.sqlite.org/index.html) database.
-The database is defined as a Prisma schema in `prisma/schema.prisma`.
+This template uses Redis to store its session using [@shopify/shopify-app-session-storage-redis](https://github.com/Shopify/shopify-app-js/blob/main/packages/apps/session-storage/shopify-app-session-storage-redis#readme). |
 
-This use of SQLite works in production if your app runs as a single instance.
-The database that works best for you depends on the data your app needs and how it is queried.
-You can run your database of choice on a server yourself or host it with a SaaS company.
-Here's a short list of databases providers that provide a free tier to get started:
-
-| Database   | Type             | Hosters                                                                                                                                                                                                                               |
-| ---------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| MySQL      | SQL              | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-mysql), [Planet Scale](https://planetscale.com/), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/mysql) |
-| PostgreSQL | SQL              | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-postgresql), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/postgres)                                   |
-| Redis      | Key-value        | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-redis), [Amazon MemoryDB](https://aws.amazon.com/memorydb/)                                                                                                        |
-| MongoDB    | NoSQL / Document | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-mongodb), [MongoDB Atlas](https://www.mongodb.com/atlas/database)                                                                                                  |
-
-To use one of these, you can use a different [datasource provider](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#datasource) in your `schema.prisma` file, or a different [SessionStorage adapter package](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/guides/session-storage.md).
+Check out [SessionStorage adapter package](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/guides/session-storage.md) to choose another storage adapter that fits your need.
 
 ### Build
 
@@ -173,16 +147,6 @@ export default defineConfig({
 
 ## Troubleshooting
 
-### Database tables don't exist
-
-If you get this error:
-
-```
-The table `main.Session` does not exist in the current database.
-```
-
-You need to create the database for Prisma. Run the `setup` script in `package.json` using your preferred package manager.
-
 ### Navigating/redirecting breaks an embedded app
 
 Embedded Shopify apps must maintain the user session, which can be tricky inside an iFrame. To avoid issues:
@@ -201,7 +165,7 @@ Shopify apps are best when they are embedded in the Shopify Admin, which is how 
 2. Pass `isEmbeddedApp: false` to `shopifyApp()` in `./app/shopify.server.js|ts`.
 3. Change the `isEmbeddedApp` prop to `isEmbeddedApp={false}` for the `AppProvider` in `/app/routes/app.jsx|tsx`.
 4. Remove the `@shopify/app-bridge-react` dependency from [package.json](./package.json) and `vite.config.ts|js`.
-5. Remove anything imported from `@shopify/app-bridge-react`.  For example: `NavMenu`, `TitleBar` and `useAppBridge`.
+5. Remove anything imported from `@shopify/app-bridge-react`. For example: `NavMenu`, `TitleBar` and `useAppBridge`.
 
 ### OAuth goes into a loop when I change my app's scopes
 
@@ -228,9 +192,9 @@ pnpm run deploy
 
 ### My shop-specific webhook subscriptions aren't updated
 
-If you are registering webhooks in the `afterAuth` hook, using `shopify.registerWebhooks`, you may find that your subscriptions aren't being updated.  
+If you are registering webhooks in the `afterAuth` hook, using `shopify.registerWebhooks`, you may find that your subscriptions aren't being updated.
 
-Instead of using the `afterAuth` hook, the recommended approach is to declare app-specific webhooks in the `shopify.app.toml` file.  This approach is easier since Shopify will automatically update changes to webhook subscriptions every time you run `deploy` (e.g: `npm run deploy`).  Please read these guides to understand more:
+Instead of using the `afterAuth` hook, the recommended approach is to declare app-specific webhooks in the `shopify.app.toml` file. This approach is easier since Shopify will automatically update changes to webhook subscriptions every time you run `deploy` (e.g: `npm run deploy`). Please read these guides to understand more:
 
 1. [app-specific vs shop-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions)
 2. [Create a subscription tutorial](https://shopify.dev/docs/apps/build/webhooks/subscribe/get-started?framework=remix&deliveryMethod=https)
@@ -244,7 +208,7 @@ During normal development, the app won't need to re-authenticate most of the tim
 
 ### Admin created webhook failing HMAC validation
 
-Webhooks subscriptions created in the [Shopify admin](https://help.shopify.com/en/manual/orders/notifications/webhooks) will fail HMAC validation. This is because the webhook payload is not signed with your app's secret key.  There are 2 solutions:
+Webhooks subscriptions created in the [Shopify admin](https://help.shopify.com/en/manual/orders/notifications/webhooks) will fail HMAC validation. This is because the webhook payload is not signed with your app's secret key. There are 2 solutions:
 
 1. Use [app-specific webhooks](https://shopify.dev/docs/apps/build/webhooks/subscribe#app-specific-subscriptions) defined in your toml file instead (recommended)
 2. Create [webhook subscriptions](https://shopify.dev/docs/api/shopify-app-remix/v1/guide-webhooks) using the `shopifyApp` object.
@@ -283,12 +247,6 @@ By default the CLI uses a cloudflare tunnel. Unfortunately it cloudflare tunnels
 
 This will not affect production, since tunnels are only for local development.
 
-### Using MongoDB and Prisma
-
-By default this template uses SQLlite as the database. It is recommended to move to a persisted database for production. If you choose to use MongoDB, you will need to make some modifications to the schema and prisma configuration. For more information please see the [Prisma MongoDB documentation](https://www.prisma.io/docs/orm/overview/databases/mongodb).
-
-Alternatively you can use a MongDB database directly with the [MongoDB session storage adapter](https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-mongodb).
-
 #### Mapping the id field
 
 In MongoDB, an ID must be a single field that defines an @id attribute and a @map("\_id") attribute.
@@ -314,10 +272,6 @@ predev = "npx prisma generate && npx prisma db push"
 dev = "npm exec remix vite:dev"
 ```
 
-#### Prisma needs to perform transactions, which requires your mongodb server to be run as a replica set
-
-See the [Prisma documentation](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/mongodb/connect-your-database-node-mongodb) for connecting to a MongoDB database.
-
 ### I want to use Polaris v13.0.0 or higher
 
 Currently, this template is set up to work on node v18.20 or higher. However, `@shopify/polaris` is limited to v12 because v13 can only run on node v20+.
@@ -330,7 +284,7 @@ You don't have to make any changes to the code in order to be able to upgrade Po
 ### "nbf" claim timestamp check failed
 
 This error will occur of the `nbf` claim timestamp check failed. This is because the JWT token is expired.
-If you  are consistently getting this error, it could be that the clock on your machine is not in sync with the server.
+If you are consistently getting this error, it could be that the clock on your machine is not in sync with the server.
 
 To fix this ensure you have enabled `Set time and date automatically` in the `Date and Time` settings on your computer.
 

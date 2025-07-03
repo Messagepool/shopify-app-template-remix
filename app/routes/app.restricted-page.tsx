@@ -2,6 +2,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { Page, Text } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
+import withPrivilege from "app/components/withPrivilege";
+import { restrictedItem } from "app/configs/privilege.config";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticate.admin(request);
@@ -11,15 +13,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {};
 
-function HomePage() {
+function RestrictedPage() {
   return (
     <Page>
-      <TitleBar title="Remix App Template" />
+      <TitleBar title="Sample Restricted Page" />
       <Text variant="bodyLg" as="p">
-        This is an empty app template.
+        You need specific privileges to access this page.
       </Text>
     </Page>
   );
 }
 
-export default HomePage;
+export default withPrivilege(restrictedItem.page.restricted, RestrictedPage);

@@ -13,18 +13,18 @@ type PrivilegeConfig = {
 
 export const restrictedItem = {
   page: {
-    home: "HOME_PAGE",
+    restricted: "RESTRICTED_PAGE",
   },
 };
 
 export const privilegeConfig: PrivilegeConfig = {
   restrictions: [
     {
-      name: restrictedItem.page.home,
+      name: restrictedItem.page.restricted,
       type: "page",
       required: [
         {
-          privilege: "template-app.home",
+          privilege: "template-app.restricted",
           access: ["read"],
         },
       ],

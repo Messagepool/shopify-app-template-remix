@@ -26,6 +26,9 @@ export default function App() {
           <Link to="/app" rel="home">
             Home
           </Link>
+          <Link to="/app/restricted-page" rel="restricted-page">
+            Restricted Page
+          </Link>
         </NavMenu>
         <Outlet />
       </AppPrivilegeProvider>

@@ -4,7 +4,7 @@ import {
   GET_PRIVILEGES_HASH,
   UserGroupPrivilegesResponse,
 } from "./queries/hn.queries";
-import { authenticate } from "../../shopify.server";
+import { authenticate } from "../shopify.server";
 import type { UserPrivilegeHashRequest } from "./types";
 import _ from "lodash";
 

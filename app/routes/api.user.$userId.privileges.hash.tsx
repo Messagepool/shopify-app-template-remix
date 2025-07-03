@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { getUserPrivilegesHash } from "./_services/hn.services";
+import { getUserPrivilegesHash } from "../services/hn.services";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   try {

@@ -3,7 +3,7 @@ import {
   getCurrentUser,
   getUserPrivileges,
   getUserPrivilegesHash,
-} from "./_services/hn.services";
+} from "../services/hn.services";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {

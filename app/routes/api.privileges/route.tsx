@@ -12,7 +12,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const privilegesData: any = await getUserPrivileges(userData.user);
     return {
       ...privilegesData,
-
       userData,
     };
   } catch (error: any) {

@@ -3,7 +3,7 @@
 client_id = "bd5e268040fabc7eae3d1b5453a75d93"
 name = "HN Template App"
 handle = "hn-template-app"
-application_url = "https://famous-reviewing-pottery-breeds.trycloudflare.com"
+application_url = "https://jacket-israel-bother-review.trycloudflare.com"
 embedded = true
 
 [webhooks]
@@ -22,7 +22,7 @@ api_version = "2025-04"
 scopes = "read_users"
 
 [auth]
-redirect_urls = ["https://famous-reviewing-pottery-breeds.trycloudflare.com/auth/callback", "https://famous-reviewing-pottery-breeds.trycloudflare.com/auth/shopify/callback", "https://famous-reviewing-pottery-breeds.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://jacket-israel-bother-review.trycloudflare.com/auth/callback", "https://jacket-israel-bother-review.trycloudflare.com/auth/shopify/callback", "https://jacket-israel-bother-review.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

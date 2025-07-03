@@ -27,6 +27,7 @@ export default function App() {
             Home
           </Link>
         </NavMenu>
+        <Outlet />
       </AppPrivilegeProvider>
     </AppProvider>
   );

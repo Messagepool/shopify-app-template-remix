@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { BlockStack, Card, Page, Text } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
-import { useOutletContext } from "@remix-run/react";
 import PrivilegeIllustration from "../assets/images/privilege.svg";
-import { privilegeConfig } from "../configs/privilege.config";
+import { useAppPrivilege } from "app/hooks/useAppPrivilege";
 
 const PageUnavailable = () => {
   return (
@@ -31,38 +30,35 @@ const PageUnavailable = () => {
   );
 };
 
-type PrivilegeData = {
-  privileges: Array<{
-    privilege: string[];
-    read: string;
-  }>;
-};
+interface WithPrivilegeProps {
+  [key: string]: any;
+}
 
-const withPrivilege = <P extends object>(
+interface UseAppPrivilegeResult {
+  hasAccessTo: (restrictionName: string) => boolean;
+  initialized: boolean;
+}
+
+const withPrivilege = (
   restrictionName: string,
-  WrappedComponent: React.ComponentType<P>,
+  WrappedComponent: React.ComponentType<any>,
 ) => {
-  return (props: P) => {
-    const privilegesData = useOutletContext<PrivilegeData>();
-    const [hasAccess, setHasAccess] = useState(false);
+  return (props: WithPrivilegeProps) => {
+    const { hasAccessTo, initialized }: UseAppPrivilegeResult =
+      useAppPrivilege();
+    const [hasAccess, setHasAccess] = useState<boolean>(false);
 
     useEffect(() => {
-      const { privileges: accesses } = privilegesData;
+      if (!initialized) return;
 
-      const accessName = privilegeConfig.restrictions.find(
-        (restriction) => restriction.name === restrictionName,
-      );
+      const withAccess = hasAccessTo(restrictionName);
 
-      if (!accessName) return setHasAccess(false);
+      setHasAccess(withAccess);
+    }, [initialized, hasAccessTo, restrictionName]);
 
-      const userPrivilegeAccess = accesses.find((access) =>
-        access.privilege.includes(accessName?.required[0].privilege),
-      );
-
-      if (!userPrivilegeAccess) return setHasAccess(false);
-
-      setHasAccess("A" === userPrivilegeAccess.read);
-    }, [privilegesData, restrictionName]);
+    if (!initialized) {
+      return null;
+    }
 
     return hasAccess ? <WrappedComponent {...props} /> : <PageUnavailable />;
   };

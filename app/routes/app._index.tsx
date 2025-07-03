@@ -2,6 +2,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { Page, Text } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
+import withPrivilege from "app/components/withPrivilege";
+import { restrictedItem } from "app/configs/privilege.config";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticate.admin(request);
@@ -11,7 +13,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {};
 
-export default function Index() {
+function HomePage() {
   return (
     <Page>
       <TitleBar title="Remix App Template" />
@@ -21,3 +23,5 @@ export default function Index() {
     </Page>
   );
 }
+
+export default withPrivilege(restrictedItem.page.home, HomePage);

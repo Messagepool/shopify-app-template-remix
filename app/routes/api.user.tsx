@@ -1,6 +1,5 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { getCurrentUser } from "../_services/hn.services";
-import { json } from "@remix-run/node";
+import { getCurrentUser } from "./_services/hn.services";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {

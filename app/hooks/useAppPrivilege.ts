@@ -6,11 +6,11 @@ const PRIVILEGE_USER_DATA_KEY = "hn-privilege-user-data";
 const PRIVILEGE_USER_DATA_HASH_KEY_PREFIX = "hn-privilege-user-data-hash-";
 
 const getUserPrivilegeHash = async (userId: string) => {
-  return fetch(`/api/privileges/${userId}/hash`).then((res) => res.json());
+  return fetch(`/api/user/${userId}/privileges/hash`).then((res) => res.json());
 };
 
 const getUserPrivileges = async () => {
-  return fetch(`/api/privileges`).then((res) => res.json());
+  return fetch(`/api/user/privileges`).then((res) => res.json());
 };
 
 type ApplicationPrivilege = {

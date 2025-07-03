@@ -15,15 +15,13 @@ export const createHnClient = () => {
 };
 
 export const getCurrentUser = async (request: any) => {
-  const { searchParams } = new URL(request.url);
-  const shop = searchParams.get("shop") ?? process.env.SHOP;
   const { session } = await authenticate.admin(request);
-  const { admin } = await unauthenticated.admin(shop ?? "");
 
-  const user = await admin.rest.resources.User.find({
-    session: session,
-    id: session.onlineAccessInfo?.associated_user.id,
-  });
+  const user = session.onlineAccessInfo?.associated_user;
+
+  if (!user) {
+    throw new Error("No user found.");
+  }
 
   return {
     id: user.id,
@@ -45,7 +43,12 @@ export const getUserPrivileges = async (user: string) => {
 
   const userPriv: any = await createHnClient().request(GET_PRIVILEGES, payload);
   const { UserGroupPrivileges } = userPriv;
-  const data = UserGroupPrivileges.data[0];
+  const data = UserGroupPrivileges.data?.[0];
+
+  if (!data) {
+    throw new Error("No user privileges found.");
+  }
+
   return {
     user: {
       id: data.id,

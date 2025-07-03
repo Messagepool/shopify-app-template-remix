@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LegacyCard, LegacyStack, Page, Text } from "@shopify/polaris";
+import { BlockStack, Card, Page, Text } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { useOutletContext } from "@remix-run/react";
 import PrivilegeIllustration from "../assets/images/privilege.svg";
@@ -9,9 +9,9 @@ const PageUnavailable = () => {
   return (
     <Page>
       <TitleBar />
-      <LegacyCard sectioned>
+      <Card>
         <div style={{ padding: 30 }}>
-          <LegacyStack vertical alignment="center">
+          <BlockStack inlineAlign="center">
             <img
               src={PrivilegeIllustration}
               width={300}
@@ -24,9 +24,9 @@ const PageUnavailable = () => {
               It appears that you may have insufficient privilege to access this
               page. Please contact administrator.
             </Text>
-          </LegacyStack>
+          </BlockStack>
         </div>
-      </LegacyCard>
+      </Card>
     </Page>
   );
 };

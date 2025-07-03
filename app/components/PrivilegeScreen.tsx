@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { TitleBar } from "@shopify/app-bridge-react";
 import {
-  LegacyCard,
-  LegacyStack,
+  BlockStack,
+  Card,
   Page,
   SkeletonDisplayText,
   Spinner,
@@ -50,9 +50,9 @@ const PrivilegeScreen = ({ onLogin, reloading }: PrivilegeScreenProps) => {
   return (
     <Page>
       <TitleBar />
-      <LegacyCard sectioned>
+      <Card>
         <div style={{ padding: 30 }}>
-          <LegacyStack vertical alignment="center" spacing="baseTight">
+          <BlockStack inlineAlign="center" gap="500">
             <img
               src={PrivilegeIllustration}
               width={300}
@@ -63,7 +63,7 @@ const PrivilegeScreen = ({ onLogin, reloading }: PrivilegeScreenProps) => {
                 Loading privileges ...
               </Text>
             ) : (
-              <LegacyStack vertical alignment="center">
+              <BlockStack inlineAlign="center" gap="100">
                 <Text variant="heading2xl" as="p">
                   Welcome back
                 </Text>
@@ -74,16 +74,16 @@ const PrivilegeScreen = ({ onLogin, reloading }: PrivilegeScreenProps) => {
                     {displayName}
                   </Text>
                 )}
-              </LegacyStack>
+              </BlockStack>
             )}
             <Text as="span" tone="subdued" variant="bodyLg">
               Please wait while we are fetching your updated application
               privileges.
             </Text>
             <Spinner accessibilityLabel="Loading privileges ..." size="large" />
-          </LegacyStack>
+          </BlockStack>
         </div>
-      </LegacyCard>
+      </Card>
     </Page>
   );
 };

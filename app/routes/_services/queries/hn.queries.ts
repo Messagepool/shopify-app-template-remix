@@ -1,34 +1,46 @@
-import { gql } from "graphql-request";
+export type UserGroupPrivilegesResponse = {
+  data: Array<{
+    id: string;
+    applications: Array<{
+      privileges: Array<{
+        privilege: string;
+        read: string;
+        write: string;
+      }>;
+    }>;
+    userStoreDepartments: Array<{
+      storeCode: string;
+      departments: string[];
+    }>;
+  }>;
+};
 
-export const GET_PRIVILEGES = gql`
+export const GET_PRIVILEGES = `
   query UserGroupPrivileges(
     $userGroupPrivilegesFilterInput: UserGroupPrivilegesFilterInput!
   ) {
     UserGroupPrivileges(
       userGroupPrivilegesFilterInput: $userGroupPrivilegesFilterInput
     ) {
-      total
-      current
-      pages
       data {
         id
-        username
         applications {
-          id
-          name
           privileges {
-            id
             privilege
             read
             write
           }
+        }
+        userStoreDepartments {
+          storeCode
+          departments
         }
       }
     }
   }
 `;
 
-export const GET_PRIVILEGES_HASH = gql`
+export const GET_PRIVILEGES_HASH = `
   query GetUserPrivilegesHash(
     $userId: ID!
     $getUserPrivilegesHashInput: GetUserPrivilegesHashInput!
